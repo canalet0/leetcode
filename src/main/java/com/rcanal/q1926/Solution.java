@@ -2,8 +2,8 @@ package com.rcanal.q1926;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Solution {
     /*
@@ -21,23 +21,76 @@ public class Solution {
 
     public static void main(String[] args) {
         char[][] maze = {
-            {'+', '+', '.', '+'},
-            {'.', '.', '.', '+'},
-            {'+', '+', '+', '.'}
+            {'+','.','+','+','+','+','+'},
+            {'+','.','+','.','.','.','+'},
+            {'+','.','+','.','+','.','+'},
+            {'+','.','.','.','+','.','+'},
+            {'+','+','+','+','+','.','+'}
         };
-        int[] entrance = {1, 2};
-        int expected = 1;
+        int[] entrance = {3, 2};
+        int expected = 4;
         int actual = new Solution().nearestExit(maze, entrance);
         assertEquals(expected, actual);
     }
     
 
     public int nearestExit(char[][] maze, int[] entrance) {        
-        return 1;
-    }
+        final int rowSize = maze.length -1;
+        final int colSize = maze[0].length -1;
+        final int[][] directions = {{0,1},{0,-1},{-1,0},{1,0}};
 
-    public int bfs(int row, int column, char[][] maze, int steps, int solution) {
-        
+        final Queue<int[]> queue = new LinkedList<>();
+
+        int steps = 0;
+
+        queue.add(entrance);
+        maze[entrance[0]][entrance[1]] = '+';
+
+        System.out.println("initial position: " + entrance[0] + " " + entrance[1]);
+
+        while (!queue.isEmpty()) {
+            steps++;
+            System.out.println("new step");
+
+            //check all 'childs' from previous step
+            for (int i = 0; i < queue.size(); i++) {
+                final int[] position = queue.poll();
+
+                for (int[] direction : directions) {
+                    final int row = position[0] + direction[0];
+                    final int col = position[1] + direction[1];
+
+                    System.out.println(String.format("walkin into: %s %s", row, col));
+
+                    if (row < 0 
+                    || row > rowSize 
+                    || col < 0 
+                    || col > colSize) {
+                        System.err.println("invalid position");
+                        continue;
+                    }
+
+                    if (maze[row][col] == '+'){
+                        System.err.println("wall hit or visited");
+                        continue;
+                    }
+
+                    //mark as visited
+                    maze[row][col] = '+';
+
+                    if (row == 0 
+                    || row == rowSize 
+                    || col == 0 
+                    || col == colSize) {
+                        return steps;
+                    }
+
+                    queue.add(new int[] {row, col});
+                }
+            }
+        }
+
+        return -1;
     }
 }
 
