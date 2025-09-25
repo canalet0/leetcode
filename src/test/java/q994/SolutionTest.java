@@ -32,5 +32,28 @@ public class SolutionTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testExample4() throws Exception {
+        int[][] grid =  {{1}};
+        int expected = -1;
+        int actual = new Solution().orangesRotting(grid);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testExample5() throws Exception {
+        int[][] grid =  {{0,1}};
+        int expected = -1;
+        int actual = new Solution().orangesRotting(grid);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testExample6() throws Exception {
+        int[][] grid =  {{0}};
+        int expected = 0;
+        int actual = new Solution().orangesRotting(grid);
+        assertEquals(expected, actual);
+    }
     
 }
